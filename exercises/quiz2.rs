@@ -36,17 +36,18 @@ mod my_module {
         let mut output: Vec<String> = vec![];
         for (string, command) in input.iter() {
             // TODO: Complete the function body. You can do it!
-            match command {
+            let transfor_string = match command {
                 Command::Uppercase => string.to_uppercase(),
                 Command::Trim      => string.trim().to_string(),
                 Command::Append(times) => {
+                    let mut new_string = string.clone();
                     for _ in 1..=*times {
-                        string.push_str("bar");
+                        new_string.push_str("bar");
                     };
-                    string
+                    new_string
                 }
-            }
-            output.push(*string)
+            };
+            output.push(transfor_string)
         }
         output
     }
