@@ -9,6 +9,7 @@
 // Execute `rustlings hint from_str` or use the `hint` watch subcommand for a
 // hint.
 
+use std::collections::btree_map::IntoValues;
 use std::num::ParseIntError;
 use std::str::FromStr;
 
@@ -54,7 +55,7 @@ impl FromStr for Person {
         if s.is_empty() {
             return Err(ParsePersonError::Empty)
         } else {
-            let p:Vec<String> = s.split(',').collect();
+            let p:Vec<&str> = s.split(',').collect();
             if p.len() != 2 {
                 return Err(ParsePersonError::BadLen)
             } else {
@@ -62,7 +63,11 @@ impl FromStr for Person {
                 if p_name.is_empty() {
                     return Err(ParsePersonError::NoName)
                 }
-                let p_age : usize = p[1].parse()?;
+                let p_age : Result<usize, _> = p[1].parse();
+                let p_age = match p_age {
+                    Ok(value) => value,
+                    Err(err) => return Err(ParsePersonError::ParseInt(err))
+                };
                 Ok(
                     Person {
                     name: p_name,
